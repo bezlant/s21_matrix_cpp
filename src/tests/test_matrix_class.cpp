@@ -23,9 +23,32 @@ TEST(test_class, copy_constructor) {
 
 TEST(test_class, move_constructor) {
     S21Matrix m(12, 12);
-    S21Matrix moved;
-    moved = std::move(m);
+    S21Matrix moved(std::move(m));
 
-    EXPECT_EQ(copy.get_cols(), 12);
-    EXPECT_EQ(copy.get_rows(), 12);
+    EXPECT_EQ(m.get_cols(), 0);
+    EXPECT_EQ(m.get_rows(), 0);
+    EXPECT_EQ(moved.get_cols(), 12);
+    EXPECT_EQ(moved.get_rows(), 12);
+}
+
+TEST(test_class, brackets_operator) {
+    S21Matrix m(6, 9);
+    EXPECT_EQ(m(0, 0), 0);
+
+    m(0, 1) = 69;
+    EXPECT_EQ(m(0, 1), 69);
+
+    m(5, 8) = 69.420;
+    EXPECT_EQ(m(5, 8), 69.420);
+}
+
+TEST(test_class, square_brackets_operator) {
+    S21Matrix m(6, 9);
+    EXPECT_EQ(m[0][0], 0);
+
+    m[5][5] = 69;
+    EXPECT_EQ(m[5][5], 69);
+
+    m[5][8] = 69.420;
+    EXPECT_EQ(m[5][8], 69.420);
 }
