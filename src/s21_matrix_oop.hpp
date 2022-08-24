@@ -33,9 +33,15 @@ class S21Matrix {
     double *operator[](uint32_t row);
     double &operator()(uint32_t row, uint32_t col);
     S21Matrix &operator+=(const S21Matrix &other);
-    S21Matrix operator+(const S21Matrix &other);
+    S21Matrix operator+(const S21Matrix &other) const;
     S21Matrix &operator-=(const S21Matrix &other);
-    S21Matrix operator-(const S21Matrix &other);
+    S21Matrix operator-(const S21Matrix &other) const;
+    S21Matrix &operator*=(const S21Matrix &other);
+    S21Matrix operator*(const S21Matrix &other) const;
+    bool operator==(const S21Matrix &other);
+    S21Matrix &operator=(S21Matrix &&other);
+
+    // S21Matrix &operator=(const S21Matrix &other);
 };
 
 #endif  // SRC_S21_MATRIX_H_
