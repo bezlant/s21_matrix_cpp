@@ -6,6 +6,9 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_STATIC_LIBRARY_PREFIX "")
 
+add_compile_options(-fsanitize=address)
+add_link_options(-fsanitize=address)
+
 add_library(s21_matrix_oop STATIC s21_matrix_oop.cpp)
 
 find_package(GTest REQUIRED)
