@@ -353,4 +353,75 @@ S21Matrix S21Matrix::InverseMatrix() {
             res[i][j] = adj_transposed[i][j] / det;
 
     return res;
+=======
 }
+
+void S21Matrix::set_cols(const uint32_t &new_cols) {
+    if (!new_cols)
+        throw std::length_error("Array size can't be zero");
+
+    S21Matrix tmp(_rows, new_cols);
+    for (uint32_t i = 0; i < _rows; i++)
+        for (uint32_t j = 0; j < (_cols < new_cols ? _cols : new_cols); j++)
+            tmp[i][j] = (*this)[i][j];
+
+    *this = std::move(tmp);
+}
+
+S21Matrix &S21Matrix::operator=(const S21Matrix &other) {
+    std::cout << "[lvalue] equal operator" << std::endl;
+    if (this != &other) {
+        delete[] _matrix;
+
+        _rows = other._rows;
+        _cols = other._cols;
+
+        _matrix = new double[_rows * _cols]();
+        std::memcpy(_matrix, other._matrix, _rows * _cols * sizeof(double));
+    }
+    return *this;
+}
+
+bool S21Matrix::operator==(const S21Matrix &other) {
+    return EqMatrix(other);
+}
+
+bool S21Matrix::EqMatrix(const S21Matrix &other) const {
+    if (_rows != other.get_rows() || _cols != other.get_cols())
+        return false;
+
+    for (uint32_t i = 0; i < (*this).get_rows(); i++)
+        for (uint32_t j = 0; j < (*this).get_cols(); j++)
+            if (std::fabs((*this)[i][j] - other[i][j]) > 1e-07)
+                return false;
+
+    return true;
+}
+
+S21Matrix &S21Matrix::operator+=(const S21Matrix &other) {
+    SumMatrix(other);
+    return *this;
+}
+
+S21Matrix S21Matrix::operator+(const S21Matrix &other) const {
+    if (_rows != other.get_rows() || _cols != other.get_cols())
+        throw "Can't sum matrices of different dimensions";
+
+    S21Matrix res(_rows, _cols);
+
+    for (uint32_t i = 0; i < (*this).get_rows(); i++)
+        for (uint32_t j = 0; j < (*this).get_cols(); j++)
+            res[i][j] = (*this)[i][j] + other[i][j];
+
+    return res;
+}
+
+void S21Matrix::SumMatrix(const S21Matrix &other) {
+    if (_rows != other.get_rows() || _cols != other.get_cols())
+        throw "Can't sum matrices of different dimensions";
+
+    for (uint32_t i = 0; i < (*this).get_rows(); i++)
+        for (uint32_t j = 0; j < (*this).get_cols(); j++)
+            (*this)[i][j] += other[i][j];
+
+
