@@ -6,6 +6,9 @@ S21Matrix::S21Matrix() : _rows(16), _cols(16) {
 }
 
 S21Matrix::S21Matrix(uint32_t rows, uint32_t cols) : _rows(rows), _cols(cols) {
+    if (_rows == 0 || _cols == 0)
+        throw std::length_error("Array size can't be zero");
+
     std::cout << "Rows & Cols Constructor" << std::endl;
     _matrix = new double[_rows * _cols]();
 }
@@ -75,7 +78,7 @@ S21Matrix &S21Matrix::operator=(S21Matrix &&other) {
 
 void S21Matrix::set_rows(const uint32_t &new_rows) {
     if (!new_rows)
-        throw std::length_error("Array size can't be zero or below");
+        throw std::length_error("Array size can't be zero");
 
     S21Matrix tmp(new_rows, _cols);
     for (uint32_t i = 0; i < (_rows < new_rows ? _rows : new_rows); i++)
@@ -87,7 +90,7 @@ void S21Matrix::set_rows(const uint32_t &new_rows) {
 
 void S21Matrix::set_cols(const uint32_t &new_cols) {
     if (!new_cols)
-        throw std::length_error("Array size can't be zero or below");
+        throw std::length_error("Array size can't be zero");
 
     S21Matrix tmp(_rows, new_cols);
     for (uint32_t i = 0; i < _rows; i++)
@@ -155,6 +158,8 @@ void S21Matrix::SumMatrix(const S21Matrix &other) {
 }
 
 S21Matrix &S21Matrix::operator-=(const S21Matrix &other) {
+    if (_rows != other.get_rows() || _cols != other.get_cols())
+        throw "Can't subtract matrices of different dimensions";
     SubMatrix(other);
     return *this;
 }
@@ -180,3 +185,70 @@ void S21Matrix::SubMatrix(const S21Matrix &other) {
         for (uint32_t j = 0; j < (*this).get_cols(); j++)
             (*this)[i][j] -= other[i][j];
 }
+
+S21Matrix &S21Matrix::operator*=(const S21Matrix &other) {
+    MulMatrix(other);
+    return *this;
+}
+
+S21Matrix &S21Matrix::operator*=(const double &value) {
+    MulNumber(value);
+    return *this;
+}
+
+S21Matrix S21Matrix::operator*(const S21Matrix &other) const {
+    if (_cols != other.get_rows() || _rows != other.get_cols())
+        throw "Dimensions don't fit for the multiplication";
+
+    S21Matrix res(_rows, other._cols);
+
+    for (int i = 0; i < _rows; i++)
+        for (int j = 0; j < other.get_cols(); j++)
+            for (int k = 0; k < _cols; k++)
+                res[i][j] += (*this)[i][k] * other[k][j];
+
+    return res;
+}
+
+S21Matrix S21Matrix::operator*(const double &value) const {
+    S21Matrix res(_rows, _cols);
+
+    for (uint32_t i = 0; i < (*this).get_rows(); i++)
+        for (uint32_t j = 0; j < (*this).get_cols(); j++)
+            res[i][j] = (*this)[i][j] * value;
+
+    return res;
+}
+
+S21Matrix operator*(const double &value, const S21Matrix &matrix) {
+    uint32_t rows = matrix.get_rows();
+    uint32_t cols = matrix.get_cols();
+    S21Matrix res(rows, cols);
+
+    for (uint32_t i = 0; i < rows; i++)
+        for (uint32_t j = 0; j < cols; j++)
+            res[i][j] = matrix[i][j] * value;
+
+    return res;
+}
+
+void S21Matrix::MulNumber(const double num) {
+    for (uint32_t i = 0; i < _rows; i++)
+        for (uint32_t j = 0; j < _cols; j++)
+            (*this)[i][j] *= num;
+}
+
+void S21Matrix::MulMatrix(const S21Matrix &other) {
+    if (_cols != other.get_rows() || _rows != other.get_cols())
+        throw "Dimensions don't fit for the multiplication";
+
+    S21Matrix res((*this)._rows, other.get_cols());
+
+    for (int i = 0; i < _rows; i++)
+        for (int j = 0; j < other.get_cols(); j++)
+            for (int k = 0; k < _cols; k++)
+                res[i][j] += (*this)[i][k] * other[k][j];
+
+    *this = std::move(res);
+}
+

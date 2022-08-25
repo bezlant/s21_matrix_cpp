@@ -237,3 +237,145 @@ TEST(test_functional, sub_operator_overload) {
     EXPECT_EQ(m(0, 0), 0);
     EXPECT_EQ(m(1, 1), 0);
 }
+
+TEST(test_functional, mul_matrices) {
+    const uint32_t rows = 2;
+    const uint32_t cols = 3;
+
+    S21Matrix m(rows, cols);
+    S21Matrix n(cols, rows);
+
+    for (int i = 0, c = 1; i < rows; i++)
+        for (int j = 0; j < cols; j++)
+            m[i][j] = c++;
+
+    // TODO: Remove all debug prints
+    // for (uint32_t i = 0; i < m.get_rows(); i++)
+    //     for (uint32_t j = 0; j < m.get_cols(); j++)
+    //         std::cout << "m[" << i << "][" << j << "] = " << m[i][j]
+    //                   << std::endl;
+    // std::cout << "--------------------------" << std::endl;
+
+    for (int i = 0, c = 7; i < cols; i++)
+        for (int j = 0; j < rows; j++)
+            n[i][j] = c++;
+
+    // for (uint32_t i = 0; i < n.get_rows(); i++)
+    //     for (uint32_t j = 0; j < n.get_cols(); j++)
+    //         std::cout << "n[" << i << "][" << j << "] = " << n[i][j]
+    //                   << std::endl;
+    // std::cout << "--------------------------" << std::endl;
+
+    m.MulMatrix(n);
+
+    // for (uint32_t i = 0; i < m.get_rows(); i++)
+    //     for (uint32_t j = 0; j < m.get_cols(); j++)
+    //         std::cout << "m[" << i << "][" << j << "] = " << m[i][j]
+    //                   << std::endl;
+
+    S21Matrix res(2, 2);
+    res[0][0] = 58;
+    res[0][1] = 64;
+    res[1][0] = 139;
+    res[1][1] = 154;
+
+    ASSERT_TRUE(m.EqMatrix(res));
+}
+
+TEST(test_functional, eqmul_operator) {
+    const uint32_t rows = 2;
+    const uint32_t cols = 3;
+
+    S21Matrix m(rows, cols);
+    S21Matrix n(cols, rows);
+
+    for (int i = 0, c = 1; i < rows; i++)
+        for (int j = 0; j < cols; j++)
+            m[i][j] = c++;
+
+    for (int i = 0, c = 7; i < cols; i++)
+        for (int j = 0; j < rows; j++)
+            n[i][j] = c++;
+
+    m *= n;
+
+    S21Matrix res(2, 2);
+    res[0][0] = 58;
+    res[0][1] = 64;
+    res[1][0] = 139;
+    res[1][1] = 154;
+
+    ASSERT_TRUE(m.EqMatrix(res));
+}
+
+TEST(test_functional, eqmul_operator_num) {
+    const uint32_t rows = 2;
+    const uint32_t cols = 3;
+
+    S21Matrix m(rows, cols);
+
+    for (int i = 0, c = 1; i < rows; i++)
+        for (int j = 0; j < cols; j++)
+            m[i][j] = c++;
+
+    m *= 2;
+
+    S21Matrix res(2, 3);
+    res[0][0] = 2;
+    res[0][1] = 4;
+    res[0][2] = 6;
+    res[1][0] = 8;
+    res[1][1] = 10;
+    res[1][2] = 12;
+
+    ASSERT_TRUE(m.EqMatrix(res));
+}
+
+TEST(test_functional, mul_operator) {
+    const uint32_t rows = 2;
+    const uint32_t cols = 3;
+
+    S21Matrix m(rows, cols);
+    S21Matrix n(cols, rows);
+
+    for (int i = 0, c = 1; i < rows; i++)
+        for (int j = 0; j < cols; j++)
+            m[i][j] = c++;
+
+    for (int i = 0, c = 7; i < cols; i++)
+        for (int j = 0; j < rows; j++)
+            n[i][j] = c++;
+
+    m = m * n;
+
+    S21Matrix res(2, 2);
+    res[0][0] = 58;
+    res[0][1] = 64;
+    res[1][0] = 139;
+    res[1][1] = 154;
+
+    ASSERT_TRUE(m == res);
+}
+
+TEST(test_functional, mul_operator_num) {
+    const uint32_t rows = 2;
+    const uint32_t cols = 3;
+
+    S21Matrix m(rows, cols);
+
+    for (int i = 0, c = 1; i < rows; i++)
+        for (int j = 0; j < cols; j++)
+            m[i][j] = c++;
+
+    m = 2 * m;
+
+    S21Matrix res(2, 3);
+    res[0][0] = 2;
+    res[0][1] = 4;
+    res[0][2] = 6;
+    res[1][0] = 8;
+    res[1][1] = 10;
+    res[1][2] = 12;
+
+    ASSERT_TRUE(m == res);
+}
