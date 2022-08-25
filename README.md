@@ -1,7 +1,3 @@
-
-
-https://user-images.githubusercontent.com/89563512/186648282-75e9cbc9-950e-4a21-a66d-cd47cb671cf1.mov
-
 # Matrix Routines
 
 ### Table of Contents
