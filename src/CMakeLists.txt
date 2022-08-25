@@ -5,6 +5,7 @@ project(Matrix++ VERSION 1.0)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_STATIC_LIBRARY_PREFIX "")
+set(CMAKE_BUILD_TYPE Debug)
 
 add_compile_options(-fsanitize=address)
 add_link_options(-fsanitize=address)
