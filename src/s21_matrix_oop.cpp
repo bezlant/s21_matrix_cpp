@@ -202,9 +202,9 @@ S21Matrix S21Matrix::operator*(const S21Matrix &other) const {
 
     S21Matrix res(_rows, other._cols);
 
-    for (int i = 0; i < _rows; i++)
-        for (int j = 0; j < other.get_cols(); j++)
-            for (int k = 0; k < _cols; k++)
+    for (uint32_t i = 0; i < _rows; i++)
+        for (uint32_t j = 0; j < other.get_cols(); j++)
+            for (uint32_t k = 0; k < _cols; k++)
                 res[i][j] += (*this)[i][k] * other[k][j];
 
     return res;
@@ -244,9 +244,9 @@ void S21Matrix::MulMatrix(const S21Matrix &other) {
 
     S21Matrix res((*this)._rows, other.get_cols());
 
-    for (int i = 0; i < _rows; i++)
-        for (int j = 0; j < other.get_cols(); j++)
-            for (int k = 0; k < _cols; k++)
+    for (uint32_t i = 0; i < _rows; i++)
+        for (uint32_t j = 0; j < other.get_cols(); j++)
+            for (uint32_t k = 0; k < _cols; k++)
                 res[i][j] += (*this)[i][k] * other[k][j];
 
     *this = std::move(res);
@@ -255,8 +255,8 @@ void S21Matrix::MulMatrix(const S21Matrix &other) {
 S21Matrix S21Matrix::Transpose() {
     S21Matrix res(_cols, _rows);
 
-    for (int i = 0; i < _rows; i++)
-        for (int j = 0; j < _cols; j++)
+    for (uint32_t i = 0; i < _rows; i++)
+        for (uint32_t j = 0; j < _cols; j++)
             res[j][i] = (*this)[i][j];
 
     return res;
@@ -266,8 +266,8 @@ namespace {
 
 void get_cofactor(const S21Matrix &m, S21Matrix &tmp, uint32_t skip_row,
                   uint32_t skip_col, uint32_t size) {
-    for (int i = 0, row = 0; row < size; row++) {
-        for (int j = 0, col = 0; col < size; col++) {
+    for (uint32_t i = 0, row = 0; row < size; row++) {
+        for (uint32_t j = 0, col = 0; col < size; col++) {
             if (row != skip_row && col != skip_col) {
                 tmp[i][j] = m[row][col];
                 j++;
@@ -290,7 +290,7 @@ double det(const S21Matrix &m, uint32_t size) {
     S21Matrix tmp(size, size);
 
     int sign = 1;
-    for (int i = 0; i < size; i++) {
+    for (uint32_t i = 0; i < size; i++) {
         get_cofactor(m, tmp, 0, i, size);
         res += sign * m[0][i] * det(tmp, size - 1);
         sign = -sign;
@@ -311,8 +311,8 @@ S21Matrix calc_complements(const S21Matrix &m) {
     S21Matrix tmp(rows, cols);
     S21Matrix res(rows, cols);
 
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < cols; j++) {
+    for (uint32_t i = 0; i < rows; i++) {
+        for (uint32_t j = 0; j < cols; j++) {
             get_cofactor(m, tmp, i, j, rows);
 
             int sign = ((i + j) % 2 == 0) ? 1 : -1;
@@ -348,8 +348,8 @@ S21Matrix S21Matrix::InverseMatrix() {
     S21Matrix adj_transposed = this->CalcComplements().Transpose();
     S21Matrix res(_rows, _cols);
 
-    for (int i = 0; i < _rows; i++)
-        for (int j = 0; j < _cols; j++)
+    for (uint32_t i = 0; i < _rows; i++)
+        for (uint32_t j = 0; j < _cols; j++)
             res[i][j] = adj_transposed[i][j] / det;
 
     return res;

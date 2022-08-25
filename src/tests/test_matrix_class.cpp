@@ -245,33 +245,15 @@ TEST(test_functional, mul_matrices) {
     S21Matrix m(rows, cols);
     S21Matrix n(cols, rows);
 
-    for (int i = 0, c = 1; i < rows; i++)
-        for (int j = 0; j < cols; j++)
+    for (uint32_t i = 0, c = 1; i < rows; i++)
+        for (uint32_t j = 0; j < cols; j++)
             m[i][j] = c++;
 
-    // TODO: Remove all debug prints
-    // for (uint32_t i = 0; i < m.get_rows(); i++)
-    //     for (uint32_t j = 0; j < m.get_cols(); j++)
-    //         std::cout << "m[" << i << "][" << j << "] = " << m[i][j]
-    //                   << std::endl;
-    // std::cout << "--------------------------" << std::endl;
-
-    for (int i = 0, c = 7; i < cols; i++)
-        for (int j = 0; j < rows; j++)
+    for (uint32_t i = 0, c = 7; i < cols; i++)
+        for (uint32_t j = 0; j < rows; j++)
             n[i][j] = c++;
 
-    // for (uint32_t i = 0; i < n.get_rows(); i++)
-    //     for (uint32_t j = 0; j < n.get_cols(); j++)
-    //         std::cout << "n[" << i << "][" << j << "] = " << n[i][j]
-    //                   << std::endl;
-    // std::cout << "--------------------------" << std::endl;
-
     m.MulMatrix(n);
-
-    // for (uint32_t i = 0; i < m.get_rows(); i++)
-    //     for (uint32_t j = 0; j < m.get_cols(); j++)
-    //         std::cout << "m[" << i << "][" << j << "] = " << m[i][j]
-    //                   << std::endl;
 
     S21Matrix res(2, 2);
     res[0][0] = 58;
@@ -289,12 +271,12 @@ TEST(test_functional, eqmul_operator) {
     S21Matrix m(rows, cols);
     S21Matrix n(cols, rows);
 
-    for (int i = 0, c = 1; i < rows; i++)
-        for (int j = 0; j < cols; j++)
+    for (uint32_t i = 0, c = 1; i < rows; i++)
+        for (uint32_t j = 0; j < cols; j++)
             m[i][j] = c++;
 
-    for (int i = 0, c = 7; i < cols; i++)
-        for (int j = 0; j < rows; j++)
+    for (uint32_t i = 0, c = 7; i < cols; i++)
+        for (uint32_t j = 0; j < rows; j++)
             n[i][j] = c++;
 
     m *= n;
@@ -314,8 +296,8 @@ TEST(test_functional, eqmul_operator_num) {
 
     S21Matrix m(rows, cols);
 
-    for (int i = 0, c = 1; i < rows; i++)
-        for (int j = 0; j < cols; j++)
+    for (uint32_t i = 0, c = 1; i < rows; i++)
+        for (uint32_t j = 0; j < cols; j++)
             m[i][j] = c++;
 
     m *= 2;
@@ -338,12 +320,12 @@ TEST(test_functional, mul_operator) {
     S21Matrix m(rows, cols);
     S21Matrix n(cols, rows);
 
-    for (int i = 0, c = 1; i < rows; i++)
-        for (int j = 0; j < cols; j++)
+    for (uint32_t i = 0, c = 1; i < rows; i++)
+        for (uint32_t j = 0; j < cols; j++)
             m[i][j] = c++;
 
-    for (int i = 0, c = 7; i < cols; i++)
-        for (int j = 0; j < rows; j++)
+    for (uint32_t i = 0, c = 7; i < cols; i++)
+        for (uint32_t j = 0; j < rows; j++)
             n[i][j] = c++;
 
     m = m * n;
@@ -363,8 +345,8 @@ TEST(test_functional, mul_operator_num) {
 
     S21Matrix m(rows, cols);
 
-    for (int i = 0, c = 1; i < rows; i++)
-        for (int j = 0; j < cols; j++)
+    for (uint32_t i = 0, c = 1; i < rows; i++)
+        for (uint32_t j = 0; j < cols; j++)
             m[i][j] = c++;
 
     m = 2 * m;
@@ -387,8 +369,8 @@ TEST(test_functional, transpose) {
     S21Matrix m(rows, cols);
     S21Matrix res(cols, rows);
 
-    for (int i = 0, c = 1; i < rows; i++)
-        for (int j = 0; j < cols; j++, c++) {
+    for (uint32_t i = 0, c = 1; i < rows; i++)
+        for (uint32_t j = 0; j < cols; j++, c++) {
             m[i][j] = c;
             res[j][i] = c;
         }
@@ -415,7 +397,7 @@ TEST(test_functional, determinant_zero) {
 }
 
 TEST(test_functional, determinant_5x5) {
-    const uint32_t size = 5;
+    uint32_t size = 5;
     S21Matrix m(size, size);
 
     m[0][1] = 6;
