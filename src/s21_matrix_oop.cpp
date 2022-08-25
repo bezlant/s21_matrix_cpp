@@ -1,7 +1,6 @@
 #include "s21_matrix_oop.hpp"
 
 S21Matrix::S21Matrix() : _rows(16), _cols(16) {
-    std::cout << "Basic Constructor" << std::endl;
     _matrix = new double[_rows * _cols]();
 }
 
@@ -9,17 +8,14 @@ S21Matrix::S21Matrix(uint32_t rows, uint32_t cols) : _rows(rows), _cols(cols) {
     if (_rows == 0 || _cols == 0)
         throw std::length_error("Array size can't be zero");
 
-    std::cout << "Rows & Cols Constructor" << std::endl;
     _matrix = new double[_rows * _cols]();
 }
 
 S21Matrix::~S21Matrix() {
-    std::cout << "Destructor" << std::endl;
     delete[] _matrix;
 }
 
 S21Matrix::S21Matrix(const S21Matrix &other) {
-    std::cout << "Copy Constructor" << std::endl;
     _rows = other._rows;
     _cols = other._cols;
 
@@ -28,7 +24,6 @@ S21Matrix::S21Matrix(const S21Matrix &other) {
 }
 
 S21Matrix::S21Matrix(S21Matrix &&other) {
-    std::cout << "Move Constructor" << std::endl;
     _rows = other._rows;
     _cols = other._cols;
     _matrix = other._matrix;
@@ -61,7 +56,6 @@ double *S21Matrix::operator[](uint32_t row) const {
 }
 
 S21Matrix &S21Matrix::operator=(S21Matrix &&other) {
-    std::cout << "[rvalue] equal operator" << std::endl;
     if (this != &other) {
         delete[] _matrix;
 
@@ -101,7 +95,6 @@ void S21Matrix::set_cols(const uint32_t &new_cols) {
 }
 
 S21Matrix &S21Matrix::operator=(const S21Matrix &other) {
-    std::cout << "[lvalue] equal operator" << std::endl;
     if (this != &other) {
         delete[] _matrix;
 
