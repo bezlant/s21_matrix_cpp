@@ -30,3 +30,7 @@
 *.exe
 *.out
 *.app
+
+src/.cache/clangd/index
+src/build
+src/compile_commands.json
