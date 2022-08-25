@@ -1,3 +1,7 @@
+
+
+https://user-images.githubusercontent.com/89563512/186648282-75e9cbc9-950e-4a21-a66d-cd47cb671cf1.mov
+
 # Matrix Routines
 
 ### Table of Contents
@@ -21,10 +25,10 @@ Implementation of simple matrix processing routines
 - Complements matrix
 
 ### Goals
-- [ ] Learn matrix operations and implementations
-- [ ] Object oriented programming
-- [ ] Get familiar with CMake
-- [ ] Implement tests for the library using gtest
+- [x] Learn matrix operations and implementations
+- [x] Object oriented programming
+- [x] Get familiar with CMake
+- [x] Implement tests for the library using gtest
 
 ### Build
 
@@ -38,3 +42,5 @@ $ make
 
 ### Tests
 * Unit tests are implemented using [googletest](https://google.github.io/googletest/) & coverage report with [llvm-cov](https://llvm.org/docs/CommandGuide/llvm-cov.html)
+
+https://user-images.githubusercontent.com/89563512/186648282-75e9cbc9-950e-4a21-a66d-cd47cb671cf1.mov
