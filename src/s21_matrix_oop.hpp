@@ -24,14 +24,12 @@ class S21Matrix {
     bool EqMatrix(const S21Matrix &other) const;
     void SumMatrix(const S21Matrix &other);
     void SubMatrix(const S21Matrix &other);
-    // TODO: All below
     void MulNumber(const double num);
     void MulMatrix(const S21Matrix &other);
     S21Matrix Transpose();
-    S21Matrix CalcComplements();
     double Determinant();
+    S21Matrix CalcComplements();
     S21Matrix InverseMatrix();
-    // TODO: All Above
 
     double *operator[](uint32_t row) const;
     double &operator()(uint32_t row, uint32_t col);
@@ -42,13 +40,11 @@ class S21Matrix {
     S21Matrix &operator-=(const S21Matrix &other);
     S21Matrix operator-(const S21Matrix &other) const;
 
-    // TODO: All below
     S21Matrix &operator*=(const S21Matrix &other);
     S21Matrix &operator*=(const double &value);
     S21Matrix operator*(const S21Matrix &other) const;
     S21Matrix operator*(const double &value) const;
     friend S21Matrix operator*(const double &value, const S21Matrix &matrix);
-    // TODO: All above
 
     bool operator==(const S21Matrix &other);
 
