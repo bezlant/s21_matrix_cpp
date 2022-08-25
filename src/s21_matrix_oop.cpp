@@ -252,3 +252,105 @@ void S21Matrix::MulMatrix(const S21Matrix &other) {
     *this = std::move(res);
 }
 
+S21Matrix S21Matrix::Transpose() {
+    S21Matrix res(_cols, _rows);
+
+    for (int i = 0; i < _rows; i++)
+        for (int j = 0; j < _cols; j++)
+            res[j][i] = (*this)[i][j];
+
+    return res;
+}
+
+namespace {
+
+void get_cofactor(const S21Matrix &m, S21Matrix &tmp, uint32_t skip_row,
+                  uint32_t skip_col, uint32_t size) {
+    for (int i = 0, row = 0; row < size; row++) {
+        for (int j = 0, col = 0; col < size; col++) {
+            if (row != skip_row && col != skip_col) {
+                tmp[i][j] = m[row][col];
+                j++;
+                if (j == size - 1) {
+                    j = 0;
+                    i++;
+                }
+            }
+        }
+    }
+}
+
+double det(const S21Matrix &m, uint32_t size) {
+
+    double res = 0;
+
+    if (size == 1)
+        return m[0][0];
+
+    S21Matrix tmp(size, size);
+
+    int sign = 1;
+    for (int i = 0; i < size; i++) {
+        get_cofactor(m, tmp, 0, i, size);
+        res += sign * m[0][i] * det(tmp, size - 1);
+        sign = -sign;
+    }
+
+    return res;
+}
+
+S21Matrix calc_complements(const S21Matrix &m) {
+    const uint32_t rows = m.get_rows();
+    const uint32_t cols = m.get_cols();
+
+    if (rows == 1) {
+        m[0][0] = 1;
+        return m;
+    }
+
+    S21Matrix tmp(rows, cols);
+    S21Matrix res(rows, cols);
+
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            get_cofactor(m, tmp, i, j, rows);
+
+            int sign = ((i + j) % 2 == 0) ? 1 : -1;
+
+            res[i][j] = sign * det(tmp, rows - 1);
+        }
+    }
+    return res;
+}
+}  // namespace
+
+double S21Matrix::Determinant() {
+    if ((*this)._rows != (*this)._cols)
+        throw "The matrix is not square to calculate determinant";
+
+    return det(*this, _rows);
+}
+
+S21Matrix S21Matrix::CalcComplements() {
+    if ((*this)._rows != (*this)._cols)
+        throw "The matrix is not square to calculate the complements";
+    return calc_complements(*this);
+}
+
+S21Matrix S21Matrix::InverseMatrix() {
+    double det = this->Determinant();
+    if (_rows != _cols)
+        throw "The matrix is not square to calculate the inverse";
+
+    if (std::fabs(det) < 1e-06)
+        throw "Determinant can't be zero to calculate inverse";
+
+    S21Matrix adj_transposed = this->CalcComplements().Transpose();
+    S21Matrix res(_rows, _cols);
+
+    for (int i = 0; i < _rows; i++)
+        for (int j = 0; j < _cols; j++)
+            res[i][j] = adj_transposed[i][j] / det;
+
+    return res;
+}
