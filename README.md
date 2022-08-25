@@ -33,6 +33,7 @@ $ git clone https://github.com/bezlant/s21_matrix_cpp
 $ cd s21_matrix_routines/src
 $ mkdir build && cd build 
 $ cmake ..
+$ make
 ```
 
 ### Tests
