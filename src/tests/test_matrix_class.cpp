@@ -1,5 +1,5 @@
-#include "gtest/gtest.h"
 #include "../s21_matrix_oop.hpp"
+#include "gtest/gtest.h"
 
 TEST(test_class, basic_constructor) {
     S21Matrix m;
@@ -620,7 +620,9 @@ TEST(test_functional, inverse_throw) {
 TEST(test_functional, inverse_1x1) {
     S21Matrix m(1, 1);
     m[0][0] = 69.420;
-    ASSERT_NEAR(1 / m[0][0], m.InverseMatrix()[0][0], 1e-06);
+    double expected = 1 / m[0][0];
+    double result = m.InverseMatrix()[0][0];
+    ASSERT_NEAR(expected, result, 1e-06);
 }
 
 TEST(test_functional, inverese_3x3_2) {
