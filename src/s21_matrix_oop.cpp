@@ -20,7 +20,7 @@ S21Matrix::S21Matrix(const S21Matrix &other) {
     _cols = other._cols;
 
     _matrix = new double[_rows * _cols]();
-    std::memcpy(_matrix, other._matrix, _rows * _cols * sizeof(double));
+    std::copy(other._matrix, other._matrix + _rows * _cols, _matrix);
 }
 
 S21Matrix::S21Matrix(S21Matrix &&other) {
@@ -102,7 +102,7 @@ S21Matrix &S21Matrix::operator=(const S21Matrix &other) {
         _cols = other._cols;
 
         _matrix = new double[_rows * _cols]();
-        std::memcpy(_matrix, other._matrix, _rows * _cols * sizeof(double));
+        std::copy(other._matrix, other._matrix + _rows * _cols, _matrix);
     }
     return *this;
 }
@@ -331,14 +331,14 @@ S21Matrix S21Matrix::CalcComplements() {
 }
 
 S21Matrix S21Matrix::InverseMatrix() {
-    double det = this->Determinant();
+    double det = Determinant();
     if (_rows != _cols)
         throw "The matrix is not square to calculate the inverse";
 
     if (std::fabs(det) < 1e-06)
         throw "Determinant can't be zero to calculate inverse";
 
-    S21Matrix adj_transposed = this->CalcComplements().Transpose();
+    S21Matrix adj_transposed = CalcComplements().Transpose();
     S21Matrix res(_rows, _cols);
 
     for (uint32_t i = 0; i < _rows; i++)
