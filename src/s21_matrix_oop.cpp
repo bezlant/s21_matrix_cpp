@@ -1,36 +1,30 @@
 #include "s21_matrix_oop.hpp"
 
-S21Matrix::S21Matrix() : _rows(16), _cols(16) {
-    _matrix = new double[_rows * _cols]();
+S21Matrix::S21Matrix()
+    : _rows(16), _cols(16), _matrix(new double[_rows * _cols]()) {
 }
 
-S21Matrix::S21Matrix(uint32_t rows, uint32_t cols) : _rows(rows), _cols(cols) {
+S21Matrix::S21Matrix(uint32_t rows, uint32_t cols)
+    : _rows(rows), _cols(cols), _matrix(new double[_rows * _cols]()) {
     if (_rows == 0 || _cols == 0)
         throw std::length_error("Array size can't be zero");
-
-    _matrix = new double[_rows * _cols]();
 }
 
 S21Matrix::~S21Matrix() {
     delete[] _matrix;
 }
 
-S21Matrix::S21Matrix(const S21Matrix &other) {
-    _rows = other._rows;
-    _cols = other._cols;
+S21Matrix::S21Matrix(const S21Matrix &other)
+    : _rows(other._rows), _cols(other._cols),
+      _matrix(new double[_rows * _cols]()) {
 
-    _matrix = new double[_rows * _cols]();
-    std::memcpy(_matrix, other._matrix, _rows * _cols * sizeof(double));
+    std::copy(other._matrix, other._matrix + _rows * _cols, _matrix);
 }
 
 S21Matrix::S21Matrix(S21Matrix &&other) {
-    _rows = other._rows;
-    _cols = other._cols;
-    _matrix = other._matrix;
-
-    other._matrix = nullptr;
-    other._rows = 0;
-    other._cols = 0;
+    _rows = std::exchange(other._rows, 0);
+    _cols = std::exchange(other._cols, 0);
+    _matrix = std::exchange(other._matrix, nullptr);
 }
 
 uint32_t S21Matrix::get_rows() const {
@@ -102,7 +96,7 @@ S21Matrix &S21Matrix::operator=(const S21Matrix &other) {
         _cols = other._cols;
 
         _matrix = new double[_rows * _cols]();
-        std::memcpy(_matrix, other._matrix, _rows * _cols * sizeof(double));
+        std::copy(other._matrix, other._matrix + _rows * _cols, _matrix);
     }
     return *this;
 }
@@ -331,14 +325,14 @@ S21Matrix S21Matrix::CalcComplements() {
 }
 
 S21Matrix S21Matrix::InverseMatrix() {
-    double det = this->Determinant();
+    double det = Determinant();
     if (_rows != _cols)
         throw "The matrix is not square to calculate the inverse";
 
     if (std::fabs(det) < 1e-06)
         throw "Determinant can't be zero to calculate inverse";
 
-    S21Matrix adj_transposed = this->CalcComplements().Transpose();
+    S21Matrix adj_transposed = CalcComplements().Transpose();
     S21Matrix res(_rows, _cols);
 
     for (uint32_t i = 0; i < _rows; i++)
