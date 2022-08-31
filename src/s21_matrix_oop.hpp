@@ -1,8 +1,9 @@
 #ifndef SRC_S21_MATRIX_H_
 #define SRC_S21_MATRIX_H_
 
-#include <iostream>
 #include <cmath>
+#include <iostream>
+#include <utility>
 
 class S21Matrix {
   private:

@@ -1,36 +1,30 @@
 #include "s21_matrix_oop.hpp"
 
-S21Matrix::S21Matrix() : _rows(16), _cols(16) {
-    _matrix = new double[_rows * _cols]();
+S21Matrix::S21Matrix()
+    : _rows(16), _cols(16), _matrix(new double[_rows * _cols]()) {
 }
 
-S21Matrix::S21Matrix(uint32_t rows, uint32_t cols) : _rows(rows), _cols(cols) {
+S21Matrix::S21Matrix(uint32_t rows, uint32_t cols)
+    : _rows(rows), _cols(cols), _matrix(new double[_rows * _cols]()) {
     if (_rows == 0 || _cols == 0)
         throw std::length_error("Array size can't be zero");
-
-    _matrix = new double[_rows * _cols]();
 }
 
 S21Matrix::~S21Matrix() {
     delete[] _matrix;
 }
 
-S21Matrix::S21Matrix(const S21Matrix &other) {
-    _rows = other._rows;
-    _cols = other._cols;
+S21Matrix::S21Matrix(const S21Matrix &other)
+    : _rows(other._rows), _cols(other._cols),
+      _matrix(new double[_rows * _cols]()) {
 
-    _matrix = new double[_rows * _cols]();
     std::copy(other._matrix, other._matrix + _rows * _cols, _matrix);
 }
 
 S21Matrix::S21Matrix(S21Matrix &&other) {
-    _rows = other._rows;
-    _cols = other._cols;
-    _matrix = other._matrix;
-
-    other._matrix = nullptr;
-    other._rows = 0;
-    other._cols = 0;
+    _rows = std::exchange(other._rows, 0);
+    _cols = std::exchange(other._cols, 0);
+    _matrix = std::exchange(other._matrix, nullptr);
 }
 
 uint32_t S21Matrix::get_rows() const {
