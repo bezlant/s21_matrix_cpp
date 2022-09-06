@@ -13,8 +13,8 @@ class S21Matrix {
   public:
     S21Matrix();
     S21Matrix(uint32_t rows, uint32_t cols);
-    S21Matrix(const S21Matrix &other);
-    S21Matrix(S21Matrix &&other);
+    S21Matrix(const S21Matrix &other) noexcept;
+    S21Matrix(S21Matrix &&other) noexcept;
     ~S21Matrix();
 
     uint32_t get_rows() const;
