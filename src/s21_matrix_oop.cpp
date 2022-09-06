@@ -6,7 +6,7 @@ S21Matrix::S21Matrix()
 
 S21Matrix::S21Matrix(uint32_t rows, uint32_t cols)
     : _rows(rows), _cols(cols), _matrix(new double[_rows * _cols]()) {
-    if (_rows == 0 || _cols == 0)
+    if (_rows <= 0 || _cols <= 0)
         throw std::length_error("Array size can't be zero");
 }
 
@@ -14,14 +14,14 @@ S21Matrix::~S21Matrix() {
     delete[] _matrix;
 }
 
-S21Matrix::S21Matrix(const S21Matrix &other)
+S21Matrix::S21Matrix(const S21Matrix &other) noexcept
     : _rows(other._rows), _cols(other._cols),
       _matrix(new double[_rows * _cols]()) {
 
     std::copy(other._matrix, other._matrix + _rows * _cols, _matrix);
 }
 
-S21Matrix::S21Matrix(S21Matrix &&other) {
+S21Matrix::S21Matrix(S21Matrix &&other) noexcept {
     _rows = std::exchange(other._rows, 0);
     _cols = std::exchange(other._cols, 0);
     _matrix = std::exchange(other._matrix, nullptr);
@@ -65,7 +65,7 @@ S21Matrix &S21Matrix::operator=(S21Matrix &&other) {
 }
 
 void S21Matrix::set_rows(const uint32_t &new_rows) {
-    if (!new_rows)
+    if (new_rows <= 0)
         throw std::length_error("Array size can't be zero");
 
     S21Matrix tmp(new_rows, _cols);
@@ -77,7 +77,7 @@ void S21Matrix::set_rows(const uint32_t &new_rows) {
 }
 
 void S21Matrix::set_cols(const uint32_t &new_cols) {
-    if (!new_cols)
+    if (new_cols <= 0)
         throw std::length_error("Array size can't be zero");
 
     S21Matrix tmp(_rows, new_cols);
