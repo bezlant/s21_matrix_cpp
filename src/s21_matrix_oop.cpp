@@ -53,9 +53,11 @@ double *S21Matrix::operator[](int32_t row) const {
 S21Matrix &S21Matrix::operator=(S21Matrix &&other) {
     if (this == &other)
         return *this;
+
     std::swap(_rows, other._rows);
     std::swap(_cols, other._cols);
     std::swap(_matrix, other._matrix);
+
     return *this;
 }
 
@@ -104,8 +106,8 @@ bool S21Matrix::EqMatrix(const S21Matrix &other) const {
     if (_rows != other.get_rows() || _cols != other.get_cols())
         return false;
 
-    for (int32_t i = 0; i < (*this).get_rows(); i++)
-        for (int32_t j = 0; j < (*this).get_cols(); j++)
+    for (int32_t i = 0; i < _rows; i++)
+        for (int32_t j = 0; j < _cols; j++)
             if (std::fabs((*this)[i][j] - other[i][j]) > 1e-07)
                 return false;
 
@@ -123,8 +125,8 @@ S21Matrix S21Matrix::operator+(const S21Matrix &other) const {
 
     S21Matrix res(_rows, _cols);
 
-    for (int32_t i = 0; i < (*this).get_rows(); i++)
-        for (int32_t j = 0; j < (*this).get_cols(); j++)
+    for (int32_t i = 0; i < _rows; i++)
+        for (int32_t j = 0; j < _cols; j++)
             res[i][j] = (*this)[i][j] + other[i][j];
 
     return res;
@@ -134,14 +136,12 @@ void S21Matrix::SumMatrix(const S21Matrix &other) {
     if (_rows != other.get_rows() || _cols != other.get_cols())
         throw "Can't sum matrices of different dimensions";
 
-    for (int32_t i = 0; i < (*this).get_rows(); i++)
-        for (int32_t j = 0; j < (*this).get_cols(); j++)
+    for (int32_t i = 0; i < _rows; i++)
+        for (int32_t j = 0; j < _cols; j++)
             (*this)[i][j] += other[i][j];
 }
 
 S21Matrix &S21Matrix::operator-=(const S21Matrix &other) {
-    if (_rows != other.get_rows() || _cols != other.get_cols())
-        throw "Can't subtract matrices of different dimensions";
     SubMatrix(other);
     return *this;
 }
@@ -152,8 +152,8 @@ S21Matrix S21Matrix::operator-(const S21Matrix &other) const {
 
     S21Matrix res(_rows, _cols);
 
-    for (int32_t i = 0; i < (*this).get_rows(); i++)
-        for (int32_t j = 0; j < (*this).get_cols(); j++)
+    for (int32_t i = 0; i < _rows; i++)
+        for (int32_t j = 0; j < _cols; j++)
             res[i][j] = (*this)[i][j] - other[i][j];
 
     return res;
@@ -163,8 +163,8 @@ void S21Matrix::SubMatrix(const S21Matrix &other) {
     if (_rows != other.get_rows() || _cols != other.get_cols())
         throw "Can't subtract matrices of different dimensions";
 
-    for (int32_t i = 0; i < (*this).get_rows(); i++)
-        for (int32_t j = 0; j < (*this).get_cols(); j++)
+    for (int32_t i = 0; i < _rows; i++)
+        for (int32_t j = 0; j < _cols; j++)
             (*this)[i][j] -= other[i][j];
 }
 
@@ -195,8 +195,8 @@ S21Matrix S21Matrix::operator*(const S21Matrix &other) const {
 S21Matrix S21Matrix::operator*(const double &value) const {
     S21Matrix res(_rows, _cols);
 
-    for (int32_t i = 0; i < (*this).get_rows(); i++)
-        for (int32_t j = 0; j < (*this).get_cols(); j++)
+    for (int32_t i = 0; i < _rows; i++)
+        for (int32_t j = 0; j < _cols; j++)
             res[i][j] = (*this)[i][j] * value;
 
     return res;
@@ -224,7 +224,7 @@ void S21Matrix::MulMatrix(const S21Matrix &other) {
     if (_cols != other.get_rows() || _rows != other.get_cols())
         throw "Dimensions don't fit for the multiplication";
 
-    S21Matrix res((*this)._rows, other.get_cols());
+    S21Matrix res(this->_rows, other.get_cols());
 
     for (int32_t i = 0; i < _rows; i++)
         for (int32_t j = 0; j < other.get_cols(); j++)
@@ -307,14 +307,14 @@ S21Matrix calc_complements(const S21Matrix &m) {
 }  // namespace
 
 double S21Matrix::Determinant() {
-    if ((*this)._rows != (*this)._cols)
+    if (this->_rows != this->_cols)
         throw "The matrix is not square to calculate determinant";
 
     return det(*this, _rows);
 }
 
 S21Matrix S21Matrix::CalcComplements() {
-    if ((*this)._rows != (*this)._cols)
+    if (this->_rows != this->_cols)
         throw "The matrix is not square to calculate the complements";
     return calc_complements(*this);
 }
