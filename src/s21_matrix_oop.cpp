@@ -66,8 +66,8 @@ void S21Matrix::set_rows(const int32_t &new_rows) {
         throw std::length_error("Array size can't be zero");
 
     S21Matrix tmp(new_rows, _cols);
-    for (int32_t i = 0; i < (_rows < new_rows ? _rows : new_rows); i++)
-        for (int32_t j = 0; j < _cols; j++)
+    for (int32_t i = 0; i < (_rows < new_rows ? _rows : new_rows); ++i)
+        for (int32_t j = 0; j < _cols; ++j)
             tmp[i][j] = (*this)[i][j];
 
     *this = std::move(tmp);
@@ -78,8 +78,8 @@ void S21Matrix::set_cols(const int32_t &new_cols) {
         throw std::length_error("Array size can't be zero");
 
     S21Matrix tmp(_rows, new_cols);
-    for (int32_t i = 0; i < _rows; i++)
-        for (int32_t j = 0; j < (_cols < new_cols ? _cols : new_cols); j++)
+    for (int32_t i = 0; i < _rows; ++i)
+        for (int32_t j = 0; j < (_cols < new_cols ? _cols : new_cols); ++j)
             tmp[i][j] = (*this)[i][j];
 
     *this = std::move(tmp);
@@ -106,8 +106,8 @@ bool S21Matrix::EqMatrix(const S21Matrix &other) const {
     if (_rows != other.get_rows() || _cols != other.get_cols())
         return false;
 
-    for (int32_t i = 0; i < _rows; i++)
-        for (int32_t j = 0; j < _cols; j++)
+    for (int32_t i = 0; i < _rows; ++i)
+        for (int32_t j = 0; j < _cols; ++j)
             if (std::fabs((*this)[i][j] - other[i][j]) > 1e-07)
                 return false;
 
@@ -125,8 +125,8 @@ S21Matrix S21Matrix::operator+(const S21Matrix &other) const {
 
     S21Matrix res(_rows, _cols);
 
-    for (int32_t i = 0; i < _rows; i++)
-        for (int32_t j = 0; j < _cols; j++)
+    for (int32_t i = 0; i < _rows; ++i)
+        for (int32_t j = 0; j < _cols; ++j)
             res[i][j] = (*this)[i][j] + other[i][j];
 
     return res;
@@ -136,8 +136,8 @@ void S21Matrix::SumMatrix(const S21Matrix &other) {
     if (_rows != other.get_rows() || _cols != other.get_cols())
         throw "Can't sum matrices of different dimensions";
 
-    for (int32_t i = 0; i < _rows; i++)
-        for (int32_t j = 0; j < _cols; j++)
+    for (int32_t i = 0; i < _rows; ++i)
+        for (int32_t j = 0; j < _cols; ++j)
             (*this)[i][j] += other[i][j];
 }
 
@@ -152,8 +152,8 @@ S21Matrix S21Matrix::operator-(const S21Matrix &other) const {
 
     S21Matrix res(_rows, _cols);
 
-    for (int32_t i = 0; i < _rows; i++)
-        for (int32_t j = 0; j < _cols; j++)
+    for (int32_t i = 0; i < _rows; ++i)
+        for (int32_t j = 0; j < _cols; ++j)
             res[i][j] = (*this)[i][j] - other[i][j];
 
     return res;
@@ -163,8 +163,8 @@ void S21Matrix::SubMatrix(const S21Matrix &other) {
     if (_rows != other.get_rows() || _cols != other.get_cols())
         throw "Can't subtract matrices of different dimensions";
 
-    for (int32_t i = 0; i < _rows; i++)
-        for (int32_t j = 0; j < _cols; j++)
+    for (int32_t i = 0; i < _rows; ++i)
+        for (int32_t j = 0; j < _cols; ++j)
             (*this)[i][j] -= other[i][j];
 }
 
@@ -184,8 +184,8 @@ S21Matrix S21Matrix::operator*(const S21Matrix &other) const {
 
     S21Matrix res(_rows, other._cols);
 
-    for (int32_t i = 0; i < _rows; i++)
-        for (int32_t j = 0; j < other.get_cols(); j++)
+    for (int32_t i = 0; i < _rows; ++i)
+        for (int32_t j = 0; j < other.get_cols(); ++j)
             for (int32_t k = 0; k < _cols; k++)
                 res[i][j] += (*this)[i][k] * other[k][j];
 
@@ -195,8 +195,8 @@ S21Matrix S21Matrix::operator*(const S21Matrix &other) const {
 S21Matrix S21Matrix::operator*(const double &value) const {
     S21Matrix res(_rows, _cols);
 
-    for (int32_t i = 0; i < _rows; i++)
-        for (int32_t j = 0; j < _cols; j++)
+    for (int32_t i = 0; i < _rows; ++i)
+        for (int32_t j = 0; j < _cols; ++j)
             res[i][j] = (*this)[i][j] * value;
 
     return res;
@@ -207,16 +207,16 @@ S21Matrix operator*(const double &value, const S21Matrix &matrix) {
     int32_t cols = matrix.get_cols();
     S21Matrix res(rows, cols);
 
-    for (int32_t i = 0; i < rows; i++)
-        for (int32_t j = 0; j < cols; j++)
+    for (int32_t i = 0; i < rows; ++i)
+        for (int32_t j = 0; j < cols; ++j)
             res[i][j] = matrix[i][j] * value;
 
     return res;
 }
 
 void S21Matrix::MulNumber(const double num) {
-    for (int32_t i = 0; i < _rows; i++)
-        for (int32_t j = 0; j < _cols; j++)
+    for (int32_t i = 0; i < _rows; ++i)
+        for (int32_t j = 0; j < _cols; ++j)
             (*this)[i][j] *= num;
 }
 
@@ -226,8 +226,8 @@ void S21Matrix::MulMatrix(const S21Matrix &other) {
 
     S21Matrix res(this->_rows, other.get_cols());
 
-    for (int32_t i = 0; i < _rows; i++)
-        for (int32_t j = 0; j < other.get_cols(); j++)
+    for (int32_t i = 0; i < _rows; ++i)
+        for (int32_t j = 0; j < other.get_cols(); ++j)
             for (int32_t k = 0; k < _cols; k++)
                 res[i][j] += (*this)[i][k] * other[k][j];
 
@@ -237,8 +237,8 @@ void S21Matrix::MulMatrix(const S21Matrix &other) {
 S21Matrix S21Matrix::Transpose() {
     S21Matrix res(_cols, _rows);
 
-    for (int32_t i = 0; i < _rows; i++)
-        for (int32_t j = 0; j < _cols; j++)
+    for (int32_t i = 0; i < _rows; ++i)
+        for (int32_t j = 0; j < _cols; ++j)
             res[j][i] = (*this)[i][j];
 
     return res;
@@ -252,10 +252,10 @@ void get_cofactor(const S21Matrix &m, S21Matrix &tmp, int32_t skip_row,
         for (int32_t j = 0, col = 0; col < size; col++) {
             if (row != skip_row && col != skip_col) {
                 tmp[i][j] = m[row][col];
-                j++;
+                ++j;
                 if (j == size - 1) {
                     j = 0;
-                    i++;
+                    ++i;
                 }
             }
         }
@@ -272,7 +272,7 @@ double det(const S21Matrix &m, int32_t size) {
     S21Matrix tmp(size, size);
 
     int sign = 1;
-    for (int32_t i = 0; i < size; i++) {
+    for (int32_t i = 0; i < size; ++i) {
         get_cofactor(m, tmp, 0, i, size);
         res += sign * m[0][i] * det(tmp, size - 1);
         sign = -sign;
@@ -293,8 +293,8 @@ S21Matrix calc_complements(const S21Matrix &m) {
     S21Matrix tmp(rows, cols);
     S21Matrix res(rows, cols);
 
-    for (int32_t i = 0; i < rows; i++) {
-        for (int32_t j = 0; j < cols; j++) {
+    for (int32_t i = 0; i < rows; ++i) {
+        for (int32_t j = 0; j < cols; ++j) {
             get_cofactor(m, tmp, i, j, rows);
 
             int sign = ((i + j) % 2 == 0) ? 1 : -1;
@@ -330,8 +330,8 @@ S21Matrix S21Matrix::InverseMatrix() {
     S21Matrix adj_transposed = CalcComplements().Transpose();
     S21Matrix res(_rows, _cols);
 
-    for (int32_t i = 0; i < _rows; i++)
-        for (int32_t j = 0; j < _cols; j++)
+    for (int32_t i = 0; i < _rows; ++i)
+        for (int32_t j = 0; j < _cols; ++j)
             res[i][j] = adj_transposed[i][j] / det;
 
     return res;
