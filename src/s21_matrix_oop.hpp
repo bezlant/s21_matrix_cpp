@@ -49,8 +49,11 @@ class S21Matrix {
 
     bool operator==(const S21Matrix &other);
 
-    S21Matrix &operator=(S21Matrix &&other) noexcept;
-    S21Matrix &operator=(const S21Matrix &other) noexcept;
+    S21Matrix &operator=(S21Matrix copy) noexcept;
+    void swap(S21Matrix &rhs) noexcept;
+    friend void swap(S21Matrix &a, S21Matrix &b) noexcept;
+    // S21Matrix &operator=(S21Matrix &&other) noexcept;
+    // S21Matrix &operator=(const S21Matrix &other) noexcept;
 };
 
 #endif  // SRC_S21_MATRIX_H_

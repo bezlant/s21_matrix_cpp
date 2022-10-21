@@ -28,6 +28,26 @@ S21Matrix::S21Matrix(S21Matrix &&other) noexcept {
     matrix_ = std::exchange(other.matrix_, nullptr);
 }
 
+// The rule of four and a half https://www.youtube.com/watch?v=7Qgd9B1KuMQ
+// Only one assignment operation implementation for move and copy
+// START
+S21Matrix &S21Matrix::operator=(S21Matrix copy) noexcept {
+    copy.swap(*this);
+    return *this;
+}
+
+void S21Matrix::swap(S21Matrix &rhs) noexcept {
+    using std::swap;
+    swap(matrix_, rhs.matrix_);
+    swap(rows_, rhs.rows_);
+    swap(cols_, rhs.cols_);
+}
+
+void swap(S21Matrix &a, S21Matrix &b) noexcept {
+    a.swap(b);
+}
+// END
+
 int32_t S21Matrix::get_rows() const {
     return rows_;
 }
@@ -50,16 +70,16 @@ double *S21Matrix::operator[](int32_t row) const {
     return row * cols_ + matrix_;
 }
 
-S21Matrix &S21Matrix::operator=(S21Matrix &&other) noexcept {
-    if (this == &other)
-        return *this;
-
-    std::swap(rows_, other.rows_);
-    std::swap(cols_, other.cols_);
-    std::swap(matrix_, other.matrix_);
-
-    return *this;
-}
+// S21Matrix &S21Matrix::operator=(S21Matrix &&other) noexcept {
+//     if (this == &other)
+//         return *this;
+//
+//     std::swap(rows_, other.rows_);
+//     std::swap(cols_, other.cols_);
+//     std::swap(matrix_, other.matrix_);
+//
+//     return *this;
+// }
 
 void S21Matrix::set_rows(const int32_t &new_rows) {
     if (new_rows <= 0)
@@ -85,18 +105,18 @@ void S21Matrix::set_cols(const int32_t &new_cols) {
     *this = std::move(tmp);
 }
 
-S21Matrix &S21Matrix::operator=(const S21Matrix &other) noexcept {
-    if (this != &other) {
-        delete[] matrix_;
-
-        rows_ = other.rows_;
-        cols_ = other.cols_;
-
-        matrix_ = new double[rows_ * cols_]();
-        std::copy(other.matrix_, other.matrix_ + rows_ * cols_, matrix_);
-    }
-    return *this;
-}
+// S21Matrix &S21Matrix::operator=(const S21Matrix &other) noexcept {
+//     if (this != &other) {
+//         delete[] matrix_;
+//
+//         rows_ = other.rows_;
+//         cols_ = other.cols_;
+//
+//         matrix_ = new double[rows_ * cols_]();
+//         std::copy(other.matrix_, other.matrix_ + rows_ * cols_, matrix_);
+//     }
+//     return *this;
+// }
 
 bool S21Matrix::operator==(const S21Matrix &other) {
     return EqMatrix(other);
