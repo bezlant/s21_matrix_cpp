@@ -7,8 +7,8 @@
 
 class S21Matrix {
   private:
-    int32_t _rows, _cols;
-    double *_matrix;
+    int32_t rows_, cols_;
+    double *matrix_;
 
   public:
     S21Matrix();
@@ -49,8 +49,8 @@ class S21Matrix {
 
     bool operator==(const S21Matrix &other);
 
-    S21Matrix &operator=(S21Matrix &&other);
-    S21Matrix &operator=(const S21Matrix &other);
+    S21Matrix &operator=(S21Matrix &&other) noexcept;
+    S21Matrix &operator=(const S21Matrix &other) noexcept;
 };
 
 #endif  // SRC_S21_MATRIX_H_
