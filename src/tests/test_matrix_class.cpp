@@ -3,8 +3,8 @@
 
 TEST(test_class, basic_constructor) {
     S21Matrix m;
-    EXPECT_EQ(m.get_cols(), 16);
-    EXPECT_EQ(m.get_rows(), 16);
+    EXPECT_EQ(m.get_cols(), 0);
+    EXPECT_EQ(m.get_rows(), 0);
 }
 
 TEST(test_class, rc_constructor) {

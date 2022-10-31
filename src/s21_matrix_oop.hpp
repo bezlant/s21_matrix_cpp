@@ -2,8 +2,7 @@
 #define SRC_S21_MATRIX_H_
 
 #include <cmath>
-#include <iostream>
-#include <utility>
+#include <algorithm>
 
 class S21Matrix {
   private:
@@ -17,8 +16,8 @@ class S21Matrix {
     S21Matrix(S21Matrix &&other) noexcept;
     ~S21Matrix();
 
-    int32_t get_rows() const;
-    int32_t get_cols() const;
+    int32_t get_rows() const noexcept;
+    int32_t get_cols() const noexcept;
     void set_rows(const int32_t &new_rows);
     void set_cols(const int32_t &new_cols);
 
@@ -27,13 +26,13 @@ class S21Matrix {
     void SubMatrix(const S21Matrix &other);
     void MulNumber(const double num);
     void MulMatrix(const S21Matrix &other);
-    S21Matrix Transpose();
-    double Determinant();
-    S21Matrix CalcComplements();
-    S21Matrix InverseMatrix();
+    S21Matrix Transpose() const;
+    double Determinant() const;
+    S21Matrix CalcComplements() const;
+    S21Matrix InverseMatrix() const;
 
     double *operator[](int32_t row) const;
-    double &operator()(int32_t row, int32_t col);
+    double &operator()(int32_t row, int32_t col) const;
 
     S21Matrix &operator+=(const S21Matrix &other);
     S21Matrix operator+(const S21Matrix &other) const;
@@ -47,13 +46,10 @@ class S21Matrix {
     S21Matrix operator*(const double &value) const;
     friend S21Matrix operator*(const double &value, const S21Matrix &matrix);
 
-    bool operator==(const S21Matrix &other);
+    bool operator==(const S21Matrix &other) const;
 
-    S21Matrix &operator=(S21Matrix copy) noexcept;
-    void swap(S21Matrix &rhs) noexcept;
-    friend void swap(S21Matrix &a, S21Matrix &b) noexcept;
-    // S21Matrix &operator=(S21Matrix &&other) noexcept;
-    // S21Matrix &operator=(const S21Matrix &other) noexcept;
+    S21Matrix &operator=(S21Matrix &&other) noexcept;
+    S21Matrix &operator=(const S21Matrix &other) noexcept;
 };
 
 #endif  // SRC_S21_MATRIX_H_
