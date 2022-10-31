@@ -84,7 +84,7 @@ void S21Matrix::set_cols(const int32_t &new_cols) {
     *this = std::move(tmp);
 }
 
-S21Matrix &S21Matrix::operator=(const S21Matrix &other) noexcept {
+S21Matrix &S21Matrix::operator=(const S21Matrix &other) {
     if (this != &other) {
         delete[] matrix_;
 

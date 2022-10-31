@@ -44,12 +44,13 @@ class S21Matrix {
     S21Matrix &operator*=(const double &value);
     S21Matrix operator*(const S21Matrix &other) const;
     S21Matrix operator*(const double &value) const;
-    friend S21Matrix operator*(const double &value, const S21Matrix &matrix);
 
     bool operator==(const S21Matrix &other) const;
 
     S21Matrix &operator=(S21Matrix &&other) noexcept;
-    S21Matrix &operator=(const S21Matrix &other) noexcept;
+    S21Matrix &operator=(const S21Matrix &other);
+
+    friend S21Matrix operator*(const double &value, const S21Matrix &matrix);
 };
 
 #endif  // SRC_S21_MATRIX_H_
