@@ -12,6 +12,7 @@ S21Matrix::S21Matrix(int32_t rows, int32_t cols) : rows_(rows), cols_(cols) {
 
 S21Matrix::~S21Matrix() {
     delete[] matrix_;
+    matrix_ = nullptr;
 }
 
 S21Matrix::S21Matrix(const S21Matrix &other)
@@ -50,12 +51,11 @@ double *S21Matrix::operator[](int32_t row) const {
 }
 
 S21Matrix &S21Matrix::operator=(S21Matrix &&other) noexcept {
-    if (this == &other)
-        return *this;
-
-    std::swap(rows_, other.rows_);
-    std::swap(cols_, other.cols_);
-    std::swap(matrix_, other.matrix_);
+    if (this != &other) {
+        std::swap(rows_, other.rows_);
+        std::swap(cols_, other.cols_);
+        std::swap(matrix_, other.matrix_);
+    }
 
     return *this;
 }
@@ -97,7 +97,7 @@ S21Matrix &S21Matrix::operator=(const S21Matrix &other) {
     return *this;
 }
 
-bool S21Matrix::operator==(const S21Matrix &other) const {
+bool S21Matrix::operator==(const S21Matrix &other) const noexcept {
     return EqMatrix(other);
 }
 
@@ -119,11 +119,7 @@ S21Matrix &S21Matrix::operator+=(const S21Matrix &other) {
 }
 
 S21Matrix S21Matrix::operator+(const S21Matrix &other) const {
-    if (rows_ != other.get_rows() || cols_ != other.get_cols())
-        throw std::logic_error("Can't sum matrices of different dimensions");
-
-    S21Matrix res(rows_, cols_);
-    res.SumMatrix(*this);
+    S21Matrix res{*this};
     res.SumMatrix(other);
 
     return res;
@@ -144,15 +140,8 @@ S21Matrix &S21Matrix::operator-=(const S21Matrix &other) {
 }
 
 S21Matrix S21Matrix::operator-(const S21Matrix &other) const {
-    if (rows_ != other.get_rows() || cols_ != other.get_cols())
-        throw std::logic_error(
-            "Can't subtract matrices of different dimensions");
-
-    S21Matrix res(rows_, cols_);
-
-    for (int32_t i = 0; i < rows_; ++i)
-        for (int32_t j = 0; j < cols_; ++j)
-            res[i][j] = (*this)[i][j] - other[i][j];
+    S21Matrix res{*this};
+    res.SubMatrix(other);
 
     return res;
 }
@@ -178,37 +167,22 @@ S21Matrix &S21Matrix::operator*=(const double &value) {
 }
 
 S21Matrix S21Matrix::operator*(const S21Matrix &other) const {
-    if (cols_ != other.get_rows() || rows_ != other.get_cols())
-        throw std::logic_error("Dimensions don't fit for the multiplication");
-
-    S21Matrix res(rows_, other.cols_);
-
-    for (int32_t i = 0; i < rows_; ++i)
-        for (int32_t j = 0; j < other.get_cols(); ++j)
-            for (int32_t k = 0; k < cols_; k++)
-                res[i][j] += (*this)[i][k] * other[k][j];
+    S21Matrix res{*this};
+    res.MulMatrix(other);
 
     return res;
 }
 
 S21Matrix S21Matrix::operator*(const double &value) const {
-    S21Matrix res(rows_, cols_);
-
-    for (int32_t i = 0; i < rows_; ++i)
-        for (int32_t j = 0; j < cols_; ++j)
-            res[i][j] = (*this)[i][j] * value;
+    S21Matrix res{*this};
+    res.MulNumber(value);
 
     return res;
 }
 
 S21Matrix operator*(const double &value, const S21Matrix &matrix) {
-    int32_t rows = matrix.get_rows();
-    int32_t cols = matrix.get_cols();
-    S21Matrix res(rows, cols);
-
-    for (int32_t i = 0; i < rows; ++i)
-        for (int32_t j = 0; j < cols; ++j)
-            res[i][j] = matrix[i][j] * value;
+    S21Matrix res{matrix};
+    res.MulNumber(value);
 
     return res;
 }
