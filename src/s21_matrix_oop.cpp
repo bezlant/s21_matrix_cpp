@@ -36,6 +36,13 @@ int32_t S21Matrix::get_cols() const noexcept {
     return cols_;
 }
 
+double &S21Matrix::operator()(int32_t row, int32_t col) {
+    if (row >= rows_ || col >= cols_ || row < 0 || col < 0)
+        throw std::out_of_range("Incorrect input, index is out of range");
+
+    return matrix_[row * cols_ + col];
+}
+
 double &S21Matrix::operator()(int32_t row, int32_t col) const {
     if (row >= rows_ || col >= cols_ || row < 0 || col < 0)
         throw std::out_of_range("Incorrect input, index is out of range");
