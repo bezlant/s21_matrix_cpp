@@ -254,7 +254,7 @@ double det(const S21Matrix &m, int32_t size) {
     return res;
 }
 
-S21Matrix calc_complements(const S21Matrix &m) {
+S21Matrix adjoint(const S21Matrix &m) {
     const int32_t rows = m.get_rows();
     const int32_t cols = m.get_cols();
 
@@ -291,25 +291,25 @@ S21Matrix S21Matrix::CalcComplements() const {
     if (this->rows_ != this->cols_)
         throw std::logic_error(
             "The matrix is not square to calculate the complements");
-    return calc_complements(*this);
+    return adjoint(*this);
 }
 
 S21Matrix S21Matrix::InverseMatrix() const {
-    double det = Determinant();
     if (rows_ != cols_)
         throw std::logic_error(
             "The matrix is not square to calculate the inverse");
 
+    double det = Determinant();
     if (std::fabs(det) < 1e-06)
         throw std::logic_error(
             "Determinant can't be zero to calculate inverse");
 
-    S21Matrix adj_transposed = CalcComplements().Transpose();
+    S21Matrix adjoint_transposed = CalcComplements().Transpose();
     S21Matrix res(rows_, cols_);
 
     for (int32_t i = 0; i < rows_; ++i)
         for (int32_t j = 0; j < cols_; ++j)
-            res[i][j] = adj_transposed[i][j] / det;
+            res[i][j] = adjoint_transposed[i][j] / det;
 
     return res;
 }
