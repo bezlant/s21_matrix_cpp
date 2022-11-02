@@ -127,9 +127,7 @@ S21Matrix &S21Matrix::operator+=(const S21Matrix &other) {
 
 S21Matrix S21Matrix::operator+(const S21Matrix &other) const {
     S21Matrix res{*this};
-    res.SumMatrix(other);
-
-    return res;
+    return res += other;
 }
 
 void S21Matrix::SumMatrix(const S21Matrix &other) {
@@ -189,9 +187,7 @@ S21Matrix S21Matrix::operator*(const double &value) const {
 
 S21Matrix operator*(const double &value, const S21Matrix &matrix) {
     S21Matrix res{matrix};
-    res.MulNumber(value);
-
-    return res;
+    return res *= value;
 }
 
 void S21Matrix::MulNumber(const double num) {
