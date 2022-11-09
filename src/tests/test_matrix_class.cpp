@@ -678,3 +678,9 @@ TEST(test_functional, inverese_3x3_3) {
     expected[2][2] = 24;
     ASSERT_TRUE(given.InverseMatrix() == expected);
 }
+
+TEST(test_functional, brackets_const) {
+    const S21Matrix m(3, 3);
+
+    ASSERT_EQ(m(0, 0), 0);
+}
