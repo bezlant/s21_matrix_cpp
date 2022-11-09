@@ -32,7 +32,6 @@ class S21Matrix {
     S21Matrix InverseMatrix() const;
 
     double *operator[](int32_t row) const;
-    double &operator()(int32_t row, int32_t col);
     double &operator()(int32_t row, int32_t col) const;
 
     S21Matrix &operator+=(const S21Matrix &other);
